@@ -1,15 +1,6 @@
-#include <algorithm>
-#include <array>
-#include <cstring>
 #include <fstream>
-#include <ios>
-#include <random>
 #include <stdio.h>
 #include <iostream>
-#include <string>
-#include <unordered_map>
-#include <vector>
-#include <ranges>
 
 std::vector<std::string> extractFile(char* name){
 	std::vector<std::string> stg;
@@ -138,11 +129,7 @@ int decodeNumbersAndAddup(std::vector<std::string> v){
 		buf.push_back(a);
 		buf.push_back(b);
 
-		std::cout << std::stoi(buf) << '\n';
-
-		num += std::stoi(buf);
-		
-
+		num += std::stoi(buf);	
 	}
 	return num;
 }
