@@ -4,7 +4,6 @@
 #include <cstdio>
 #include <stdexcept>
 #include <string>
-#include <type_traits>
 #include <vector>
 #include <fstream>
 #include <iostream>
@@ -29,13 +28,10 @@ std::vector<std::string> getGames(char* fileName){
 int checkRGB(std::string s){
     if (s.find("red") != std::string::npos) {
         return 0;
-        std::cout << "red" << '\n';
     }else if (s.find("green") != std::string::npos) {
         return 1;
-        std::cout << "green" << '\n';
     }else if (s.find("blue") != std::string::npos) {
         return 2;
-        std::cout << "blue" << '\n';
     }else{
         throw std::invalid_argument("recieved invalid string");
     }
@@ -68,9 +64,7 @@ int main(){
 
     int total = 0;
 
-    int RMAX = 12;
-    int GMAX = 13;
-    int BMAX = 14;
+    int RMAX, GMAX, BMAX = 0;
 
     for (int i{0}; i < gamesArr.size(); i++) {
 
