@@ -1,3 +1,4 @@
+#include <algorithm>
 #include <array>
 #include <cctype>
 #include <fstream>
@@ -23,7 +24,7 @@ std::vector<std::string> loadFilesLines(){
 }
 
 
-bool doesHaveAdjacentSymbol(int i, int j, std::vector<std::string> inputArr){
+bool doesHaveAdjacentSymbol(int i, int j, std::vector<std::string> inputArr, std::array<int, 2>* resPtr){
 
     std::array<std::array<int, 2>, 8> mappings;
     mappings.at(0) = {-1,-1};
@@ -39,6 +40,7 @@ bool doesHaveAdjacentSymbol(int i, int j, std::vector<std::string> inputArr){
         if (i+yx.at(0) > 0 && i+yx.at(0) < inputArr.size()  &&
             j+yx.at(1) > 0 && j+yx.at(1) < inputArr.at(i+yx.at(0)).length() &&
             inputArr.at(i+yx.at(0)).at(j+yx.at(1)) == '*') {
+            *resPtr = yx;
             return true;
         }
     }
@@ -50,27 +52,53 @@ int main(){
     std::vector<std::string> input = loadFilesLines();
 
     int total{0};
+    std::vector<std::array<int, 2>> nums;
+    std::vector<int> numLoc;
 
     for (int i{0}; i < input.size(); i++) {
         for (int j {0}; j < input.at(i).length() ; j++) {
             bool isAdjacent = false;
             int a = 0;
+            std::array<int, 2> resSym{0};
 
             if (isdigit(input.at(i).at(j))) {
                 while ((j + a) != input.at(i).length() && isdigit(input.at(i).at(j + a))) {
-                    if (doesHaveAdjacentSymbol(i, j+a, input)) {
+                    if (doesHaveAdjacentSymbol(i, j+a, input,&resSym)) {
                         isAdjacent = true;
+                        resSym = {resSym.at(0)+i, resSym.at(1)+j+a};
                     }
+
                     a++;
                 }
             }
             if(isAdjacent){
-                total += std::stoi(input.at(i).substr(j,a));
-                std::cout << input.at(i).substr(j,a) << '\n';
+                nums.push_back(resSym);
+                numLoc.push_back(std::stoi(input.at(i).substr(j,a)));
             }
             j += a;
         }
     }
+
+    int i = 0;
+    for (std::array<int, 2> x: nums) {
+        std::cout << x.front() << " , " << x.back()<< " : " << numLoc.at(i)  << '\n';
+        i++;
+    }
+
+    if (numLoc.size() == nums.size()) {
+        std::cout << "They are the same!" << '\n';
+    }
+
+    for (int i{0}; i < nums.size(); i++) {
+        for (int j{0}; j < nums.size(); j++) {
+            if (nums.at(i)  == nums.at(j) && i != j) {
+                total += numLoc.at(i) * numLoc.at(j);
+                numLoc.at(i) = 0;
+                numLoc.at(j) = 0;
+            }
+        }
+    }
+
     std::cout << total << '\n';
     return 0;
 }
